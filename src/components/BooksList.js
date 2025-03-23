@@ -8,7 +8,7 @@ const BooksList = () => {
   ];
 
   return (
-    <div>
+    <div className='books-list'>
       <h2>Books List</h2>
       <ul>
         {books.map((book) => (

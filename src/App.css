@@ -1,30 +1,152 @@
+:root {
+  --primary-color: #4a54e6;
+  --secondary-color: #6c75f9;
+  --accent-color: #ff6b6b;
+  --background-gradient: linear-gradient(135deg, #f5f7ff 0%, #fdf2ff 100%);
+  --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
 .App {
   text-align: center;
-  padding: 20px;
+  padding: 40px 20px;
+  min-height: 100vh;
+  background: var(--background-gradient);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  animation: gradientShift 15s ease infinite;
 }
 
-/*
- .lists-container {
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.lists-container {
   display: flex;
-  justify-content: space-around;
-  margin-top: 30px;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+  animation: slideIn 0.8s cubic-bezier(0.23, 1, 0.32, 1);
 }
-.books-list, .students-list {
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
-}
-*/
 
-ul {
-  list-style-type: none;
-  padding: 0;
+@keyframes slideIn {
+  from { 
+    opacity: 0;
+    transform: perspective(1000px) rotateX(-30deg) translateY(50px);
+  }
+  to { 
+    opacity: 1;
+    transform: perspective(1000px) rotateX(0) translateY(0);
+  }
+}
+
+.books-list, .students-list {
+  border: 2px solid var(--primary-color);
+  padding: 25px;
+  border-radius: 12px;
+  width: 320px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: var(--box-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.books-list:hover, .students-list:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(74, 84, 230, 0.2);
+}
+
+.books-list::before, .students-list::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+.books-list:hover::before, .students-list:hover::before {
+  left: 100%;
 }
 
 li {
-  margin: 10px 0;
-  padding: 8px;
-  background-color: #f5f5f5;
-  border-radius: 4px;
+  margin: 12px 0;
+  padding: 12px;
+  background-color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  transform-origin: left center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+li:hover {
+  transform: translateX(10px) scale(1.02);
+  background-color: #f8f9ff;
+  box-shadow: 0 4px 12px rgba(74, 84, 230, 0.15);
+}
+
+li::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--primary-color);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+li:hover::after {
+  transform: scaleY(1);
+}
+
+/* Loading animation for items */
+@keyframes itemEntrance {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+li:nth-child(odd) {
+  animation: itemEntrance 0.6s ease forwards;
+}
+
+li:nth-child(even) {
+  animation: itemEntrance 0.6s 0.2s ease forwards;
+}
+
+/* Click animation */
+li:active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
+}
+
+/* Pulse effect for attention */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(74, 84, 230, 0.4); }
+  70% { box-shadow: 0 0 0 12px rgba(74, 84, 230, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(74, 84, 230, 0); }
+}
+
+.books-list:focus-within, 
+.students-list:focus-within {
+  animation: pulse 1.5s infinite;
 }
